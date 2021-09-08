@@ -123,7 +123,7 @@ public class MyFrame extends JFrame {
 			for (int i = 0; i<4; i++) {
 				for (int j = 0; j < 4; j++) {
 					if(gameblock.blocks[random2][0][i][j] == 1) {
-						g.fill3DRect(j*blocksize+120, i*blocksize, blocksize, blocksize, true);
+						g.fill3DRect(j*blocksize+500, i*blocksize, blocksize, blocksize, true);
 					}
 				}
 			}
@@ -134,7 +134,7 @@ public class MyFrame extends JFrame {
 				if (gameboard.boards[2][x] == 1)
 					limit = true;
 			}
-			System.out.println(limit); //로그
+			//System.out.println(limit); //로그
 		}
 		
 		public void removeBlock(int cnt, int cnt2, Graphics g) {
@@ -222,9 +222,9 @@ public class MyFrame extends JFrame {
 			return 0;
 		}
 		
-		public void checkRotation() {
+		public void rotationChange() {
 			int cnt = 0;
-			
+			//회전한 도형 좌표 계산
 			rotation = (rotation + 1) % 4;
 			for (int i = 0; i < 4; i++) {
 				for(int j = 0; j < 4; j++) {
@@ -235,16 +235,19 @@ public class MyFrame extends JFrame {
 					}
 				}
 			}
-			
+		}
+		
+		public void checkRotation() {
+			//회전한 블록의 좌표가 벽에 겹치는지 판단하고 좌표 조정
 			if (gameboard.boards[curY[1]][curX[1]] == 1) {
-				if (random == 1)
+				if (random == 0)
 					wid += (blocksize * 2);
-				else if (random == 2)
+				else if (random == 1)
 					wid -= blocksize;
 			}
 			
 			else if (gameboard.boards[curY[0]][curX[0]] == 1){
-				if (random == 6 && rotation == 3)
+				if (random == 5 && rotation == 3)
 					wid -= blocksize;
 				else {
 					wid += blocksize;
@@ -272,6 +275,7 @@ public class MyFrame extends JFrame {
 		
 		public void moveUp() { // 위쪽 방향키 도형 회전
 			//회전시 블록이 벽에 충돌하는 판정하는 메소드 필요함. 
+			rotationChange();
 			checkRotation();
 			if(limit == false)
 				TP.repaint();
