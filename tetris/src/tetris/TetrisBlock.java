@@ -3,6 +3,7 @@ package tetris;
 public class TetrisBlock {
 	int code;
 	int rotate = 0;
+	int size = 20;
 	int[][][][] block = {
 		{
 		//1
