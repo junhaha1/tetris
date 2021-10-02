@@ -17,7 +17,7 @@ public class TetrisGameView extends JPanel{
 	int randomC = (int) (Math.random() * 4);
 	
 	//블럭 높이, 좌표
-	int hgt = -20;
+	int hgt = 0;
 	int wid  = 100;
 	int[] curX =  new int[4];
 	int[] curY =  new int[4];
@@ -36,15 +36,18 @@ public class TetrisGameView extends JPanel{
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
+		
+		endJudge(); //게임 종료 판정
 		paintBorder(g); // 테두리 그리기
 		drawBoard(g); //보드판 그리기
 		lookBlock(g); // 블럭 미리보기
 		
-		endJudge(); //게임 종료 판정
 		findCoord(); // 생성된 블럭 좌표 구하기
 		drawBlock(g); // 생성된 블럭 그리기
 		
-		blockToWall(); //벽이나 바닥 만나면 벽으로 바뀜. 
+		blockToWall(); //벽이나 바닥 만나면 벽으로 바뀜.
+		removeBlock();
+		
 		if(End) {
 			changeRandom();
 			End = false;
@@ -106,8 +109,40 @@ public class TetrisGameView extends JPanel{
 				for (int j = 0; j < 4; j++) {
 					b2.board[curY[j]][curX[j] + 1] = 1;
 					wid = 100;
-					hgt = -20;
+					hgt = 0;
 					End = true;
+				}
+			}
+		}
+	}
+	
+	//보드판 로그 찍기
+	public void printlog() {
+		System.out.println("----------------------------------------");
+		for(int y = 0; y < 21; y ++) {
+			for(int x = 0; x < 12; x++) {
+				System.out.print(b2.board[y][x]);
+			}
+			System.out.println();
+		}
+		System.out.println("----------------------------------------");
+	}
+	
+	//블럭 삭제
+	public void removeBlock() {
+		int cnt;
+		
+		for(int y = 0; y < 20; y ++) {
+			cnt = 0;
+			for(int x = 1; x < 11; x++) {
+				if(b2.board[y][x] == 1)
+					cnt++;
+			}
+			if(cnt == 10) {
+				for(int j = y; j > 1; j--) {
+					for(int i = 1; i < 11; i++) {
+						b2.board[j][i] = b2.board[j-1][i];
+					}
 				}
 			}
 		}
@@ -130,8 +165,61 @@ public class TetrisGameView extends JPanel{
 		g.drawLine(399, 0, 399, 149);
 	}
 	
+	/*블록 검사*/
+	public int checkRotateWall() {
+		int temp = b.rotate;
+		
+		b.rotate = (b.rotate + 1) % 4;
+		findCoord();
+		
+		for(int i = 0; i < 4; i++)
+			if(b2.board[curY[i]][curX[i] + 1] == 1)
+				return temp;
+		
+		return b.rotate;
+	}
+	
+	public boolean checkLWall() {
+		for (int i=0; i<4; i++)
+			if (b2.board[0][curX[i]] == 1) 
+				return false;
+		return true;
+	}
+	
+	public boolean checkRWall() {
+		for (int i=0; i<4; i++)
+			if (b2.board[0][curX[i] + 2] == 1) 
+				return false;
+		return true;
+	}
+	
+	
+	/*블록 이동 관련*/
+	
+	//블록 하강
 	public void Down() {
 		hgt += b.size;
+		this.repaint();
+	}
+	
+	//블록 우측 이동
+	public void moveRight() {
+		if(checkRWall()) {
+			wid += b.size;
+			this.repaint();
+		}
+	}
+	//블럭 좌측 이동
+	public void moveLeft() {
+		if(checkLWall()) {
+			wid -= b.size;
+			this.repaint();
+		}
+	}
+	
+	//블럭 회전
+	public void blockRotation() {
+		b.rotate = checkRotateWall();
 		this.repaint();
 	}
 	

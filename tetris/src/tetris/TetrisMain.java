@@ -13,20 +13,36 @@ public class TetrisMain extends JFrame{
 	
 	TetrisMain(){
 		setSize(500, 600);
+	
+		add(p1);
 		
-		b1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				p1.repaint();
+		p1.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				int keyCode = e.getKeyCode();
+				
+				switch(keyCode) {
+					case KeyEvent.VK_UP:
+						p1.blockRotation();
+						break;
+					case KeyEvent.VK_RIGHT:
+						p1.moveRight();
+						break;
+					case KeyEvent.VK_LEFT:
+						p1.moveLeft();
+						break;
+					case KeyEvent.VK_DOWN:
+						p1.Down();
+						break;
+				}
 			}
 		});
-		
-		add(p1);
 		
 		t1 = new TetrisThread(p1);
 		
 		setLayout(null);
 		setVisible(true);
 		
+		p1.requestFocus(true);
 		t1.run();
 	}
 	
