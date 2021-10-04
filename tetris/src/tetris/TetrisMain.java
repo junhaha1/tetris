@@ -6,14 +6,11 @@ import java.awt.event.*;
 public class TetrisMain extends JFrame{
 	TetrisGameView p1 = new TetrisGameView();
 	TetrisThread t1;
-	//테스트
-	JPanel tem1 = new JPanel();
-	JButton b1 = new JButton("chage");
-	//테스트
+	
+	JButton st = new JButton("게임 시작");
 	
 	TetrisMain(){
 		setSize(500, 600);
-	
 		add(p1);
 		
 		p1.addKeyListener(new KeyAdapter() {
@@ -43,6 +40,7 @@ public class TetrisMain extends JFrame{
 		setVisible(true);
 		
 		p1.requestFocus(true);
+		
 		t1.run();
 	}
 	

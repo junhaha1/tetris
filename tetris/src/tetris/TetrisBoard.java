@@ -25,6 +25,14 @@ public class TetrisBoard {
 			{1,1,1,1,1,1,1,1,1,1,1,1}
 	};
 	
-	int x = 12;
-	int y = 21;
+	int x = 12; // 열 갯수
+	int y = 21; // 행 갯수
+	
+	public void resetBoard() { // 보드 초기화
+		for(int j = 0; j < y - 1; j++) {
+			for(int i = 1; i < x - 1; i++) {
+				board[j][i] = 0;
+			}
+		}
+	}
 }

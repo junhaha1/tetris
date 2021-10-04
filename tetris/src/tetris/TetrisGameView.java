@@ -1,8 +1,12 @@
 package tetris;
 
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class TetrisGameView extends JPanel{
@@ -10,6 +14,8 @@ public class TetrisGameView extends JPanel{
 	
 	TetrisBlock b = new TetrisBlock();
 	TetrisBoard b2 = new TetrisBoard();
+	
+	
 	
 	//블럭 모양 & 색 랜덤 값
 	int randomA = (int) (Math.random() * 7);
@@ -22,9 +28,7 @@ public class TetrisGameView extends JPanel{
 	int[] curX =  new int[4];
 	int[] curY =  new int[4];
 	
-	
-	
-	//테트리스 컨트롤 변수
+	//게임 컨트롤 변수
 	boolean End = false;
 	boolean limit = true;
 	
@@ -42,11 +46,16 @@ public class TetrisGameView extends JPanel{
 		drawBoard(g); //보드판 그리기
 		lookBlock(g); // 블럭 미리보기
 		
-		findCoord(); // 생성된 블럭 좌표 구하기
-		drawBlock(g); // 생성된 블럭 그리기
+		if (limit) {
+			findCoord(); // 생성된 블럭 좌표 구하기
+			drawBlock(g); // 생성된 블럭 그리기
 		
-		blockToWall(); //벽이나 바닥 만나면 벽으로 바뀜.
-		removeBlock();
+			blockToWall(); //벽이나 바닥 만나면 벽으로 바뀜.
+			removeBlock();
+		}
+		else
+			gameOver();
+		
 		
 		if(End) {
 			changeRandom();
@@ -155,6 +164,20 @@ public class TetrisGameView extends JPanel{
 				limit = false;
 	}
 	
+	//테트리스 메세지
+	public void gameOver() {
+		TetrisDialog TD = new TetrisDialog(this);
+		TD.setVisible(true);
+	}
+	
+	//옵션 설정
+	public void resetOption() {
+		hgt = 0;
+		wid  = 100;
+		End = false;
+		limit = true;
+	}
+	
 	//테트리스 테두리
 	public void paintBorder(Graphics g) { //1차 완성
 		g.setColor(Color.black);
@@ -164,6 +187,7 @@ public class TetrisGameView extends JPanel{
 		g.drawLine(249, 0, 249, 149);
 		g.drawLine(399, 0, 399, 149);
 	}
+	
 	
 	/*블록 검사*/
 	public int checkRotateWall() {

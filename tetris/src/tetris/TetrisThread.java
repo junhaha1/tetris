@@ -13,8 +13,6 @@ public class TetrisThread extends Thread{
 				if(p1.limit) {
 					p1.Down();
 				}
-				else
-					break;
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				return;
